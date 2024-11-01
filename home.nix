@@ -1,5 +1,9 @@
 { config, pkgs , ... }:
 {
+  inputs = [
+    ./river
+  ];
+
   home.username = "muf";
   home.homeDirectory = "/home/muf";
 
