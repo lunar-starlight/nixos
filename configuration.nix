@@ -5,10 +5,9 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -40,7 +39,6 @@
     isNormalUser = true;
     description = "Luna Strah";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -51,6 +49,7 @@
     vim
     wget
     curl
+    home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
