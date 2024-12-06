@@ -38,8 +38,8 @@
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
-    "no-url-literals"
-    "pipe-operators"
+    #"no-url-literals"
+    #"pipe-operators"
   ];
   environment.systemPackages = with pkgs; [
     git
