@@ -26,15 +26,11 @@
     LC_TIME = "en_DK.UTF-8";
   };
 
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
   users.users.muf = {
     isNormalUser = true;
     description = "Luna Strah";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input"];
+    shell = pkgs.fish;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -48,6 +44,7 @@
     home-manager
     sddm
     river
+    fish
 
     # audio
     wireplumber
@@ -56,6 +53,7 @@
   ];
 
   programs.river.enable = true;
+  programs.fish.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -71,6 +69,9 @@
     wayland.enable = true;
   };
 
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+  '';
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
