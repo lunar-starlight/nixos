@@ -22,7 +22,7 @@
     LC_NAME = "en_DK.UTF-8";
     LC_NUMERIC = "en_DK.UTF-8";
     LC_PAPER = "en_DK.UTF-8";
-    LC_TELEPHONE = "en_DK.UTF-8";
+    LC_TELEPHONE = "sl_SI.UTF-8";
     LC_TIME = "en_DK.UTF-8";
   };
 
@@ -35,7 +35,12 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+    "no-url-literals"
+    "pipe-operators"
+  ];
   environment.systemPackages = with pkgs; [
     git
     vim
