@@ -29,7 +29,7 @@
   users.users.muf = {
     isNormalUser = true;
     description = "Luna Strah";
-    extraGroups = [ "networkmanager" "wheel" "input"];
+    extraGroups = [ "networkmanager" "wheel" "input" "video"];
     shell = pkgs.fish;
   };
 
@@ -42,9 +42,10 @@
     wget
     curl
     home-manager
-    sddm
+    kdePackages.sddm
     river
     fish
+    acpilight
 
     # audio
     wireplumber
@@ -72,6 +73,12 @@
   services.udev.extraRules = ''
     KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
   '';
+  hardware.acpilight.enable = true;
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
