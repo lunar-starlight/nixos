@@ -8,6 +8,11 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = [
+    "video=DP-1:2560x1440@60"
+    "video=HDMI-A-2:1440x900@60"
+  ];
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
@@ -48,7 +53,7 @@
     curl
     home-manager
     river
-    xdg-desktop-portal-wlr
+    #xdg-desktop-portal-wlr
     fish
     acpilight
 
@@ -61,25 +66,30 @@
   programs.river.enable = true;
   programs.fish.enable = true;
 
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    wireplumber = {
+  services = {
+    pipewire = {
       enable = true;
+      pulse.enable = true;
+      wireplumber = {
+        enable = true;
+      };
     };
-  };
  
-  services.displayManager.ly = {
-    enable = true;
-    #settings = {
-    #  animation = "matrix";
-    #  bigclock = "en";
-    #  clear_password = true;
-    #  restart_cmd = "systemctl reboot";
-    #  shutdown_cmd = "systemctl poweroff";
-    #  sleep_cmd = "systemctl sleep";
-    #};
+    displayManager.ly = {
+      enable = true;
+      #settings = {
+      #  animation = "matrix";
+      #  bigclock = "en";
+      #  clear_password = true;
+      #  restart_cmd = "systemctl reboot";
+      #  shutdown_cmd = "systemctl poweroff";
+      #  sleep_cmd = "systemctl sleep";
+      #};
+    };
+
+    udev.extraRules = ''
+      KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
+    '';
   };
 
   xdg.portal = {
@@ -88,22 +98,30 @@
       xdg-desktop-portal-wlr
       #xdg-desktop-portal-gtk
     ];
-    config.common.default = [ "wlr" ];
-    config.river = {
-      default = [ "wlr" ];
+    configPackages = [ pkgs.river ];
+    #config.common.default = [ "wlr" ];
+    #config.river = {
+    #  default = [ "wlr" ];
+    #};
+    #wlr.enable = true;
+  };
+
+  hardware = {
+    acpilight.enable = true;
+
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
     };
-    wlr.enable = true;
+
+    graphics = {
+      enable32Bit = true;
+      extraPackages = with pkgs; [ amdvlk ];
+      extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    };
   };
 
-  services.udev.extraRules = ''
-    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
-  '';
-  hardware.acpilight.enable = true;
-
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-  };
+  security.rtkit.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

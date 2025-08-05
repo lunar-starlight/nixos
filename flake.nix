@@ -10,10 +10,10 @@
     };
   };
 
-  outputs = { nixpkgs, lix-module, ... }@inputs: {
+  outputs = { nixpkgs, lix-module, ... }@inputs:
   let
     hostname = "pink-pear";
-  in 
+  in {
     nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit hostname; };
