@@ -1,15 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, hostname, ... }:
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hardware-configuration-${hostname}.nix
   ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "rainbow-lemon";
+  networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Ljubljana";
@@ -42,8 +42,8 @@
     wget
     curl
     home-manager
-    kdePackages.sddm
     river
+    xdg-desktop-portal-wlr
     fish
     acpilight
 
@@ -65,9 +65,29 @@
     };
   };
  
-  services.displayManager.sddm = {
+  services.displayManager.ly = {
     enable = true;
-    wayland.enable = true;
+    #settings = {
+    #  animation = "matrix";
+    #  bigclock = "en";
+    #  clear_password = true;
+    #  restart_cmd = "systemctl reboot";
+    #  shutdown_cmd = "systemctl poweroff";
+    #  sleep_cmd = "systemctl sleep";
+    #};
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      #xdg-desktop-portal-gtk
+    ];
+    config.common.default = [ "wlr" ];
+    config.river = {
+      default = [ "wlr" ];
+    };
+    wlr.enable = true;
   };
 
   services.udev.extraRules = ''
