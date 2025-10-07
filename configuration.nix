@@ -6,13 +6,19 @@
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelParams = [
-    "video=DP-1:2560x1440@60"
-    "video=HDMI-A-2:1440x900@60"
-  ];
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    initrd.kernelModules = [ "amdgpu" ];
+    #kernelParams = [
+    #  "video=DP-1:2560x1440@60"
+    #  "video=HDMI-A-2:1440x900@60"
+    #];
+    #uvesafb = {
+    #  enable = true;
+    #  gfx-mode = "2560x1440-0";
+    #};
+  };
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
@@ -56,6 +62,7 @@
     #xdg-desktop-portal-wlr
     fish
     acpilight
+    fbset
 
     # audio
     wireplumber
@@ -114,10 +121,36 @@
       powerOnBoot = true;
     };
 
-    graphics = {
-      enable32Bit = true;
-      extraPackages = with pkgs; [ amdvlk ];
-      extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    #graphics = {
+    #  enable32Bit = true;
+    #  extraPackages = with pkgs; [ amdvlk ];
+    #  extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+    #};
+
+    amdgpu = {
+      initrd.enable = true;
+      amdvlk.enable = true;
+      amdvlk.support32Bit.enable = true;
+    };
+    #display = {
+    #  outputs = {
+    #    "DP-1".mode = "2560x1440@60";
+    #  };
+    #};
+  };
+
+  systemd.services = {
+    set-fb = {
+      enable = true;
+      wantedBy = [ "getty.target" ];
+      description = "Set framebuffer geometry";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        Restart = "on-failure";
+        #ExecStart = "fbset -g 2560 1440 2560 1440 32";
+        ExecStart = ''${pkgs.bash}/bin/bash -c "until test -e '/dev/fb0'; do :; done ; ${pkgs.fbset}/bin/fbset -xres 2560 -yres 1440 -depth 24 -match"'';
+      };
     };
   };
 
