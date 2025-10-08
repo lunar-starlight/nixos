@@ -100,6 +100,26 @@
     powerOnBoot = true;
   };
 
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [ canon-cups-ufr2 ];
+  };
+  services.samba.enable = true;
+  hardware.printers = {
+    ensurePrinters = [
+      {
+        name = "printsrv";
+        deviceUri = "smb://printsrv.fmf.uni-lj.si/TISKAJ";
+        model = "CNRCUPSIRADVC5840ZK.ppd"; # CANON IR-ADV C5840/5850
+        ppdOptions = {
+          Duplex = "DuplexNoTumble";
+          PageSize = "A4";
+        };
+      }
+    ];
+    ensureDefaultPrinter = "printsrv";
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
