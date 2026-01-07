@@ -2,15 +2,10 @@
   description = "NixOS config flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   };
 
-  outputs = { nixpkgs, lix-module, ... }@inputs:
+  outputs = { nixpkgs, ... }@inputs:
   let
     hostname = "pink-pear";
   in {
@@ -19,7 +14,6 @@
       specialArgs = { inherit hostname; };
       modules = [
         ./configuration.nix
-        lix-module.nixosModules.default
       ];
     };
   };

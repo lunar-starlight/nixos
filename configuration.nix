@@ -1,6 +1,15 @@
 { config, pkgs, hostname, ... }:
-
 {
+  nixpkgs.overlays = [ (final: prev: {
+    inherit (prev.lixPackageSets.stable)
+      nixpkgs-review
+      nix-eval-jobs
+      nix-fast-build
+      colmena;
+  }) ];
+
+  nix.package = pkgs.lixPackageSets.stable.lix;
+
   imports = [
     ./hardware-configuration-${hostname}.nix
   ];
@@ -58,7 +67,7 @@
     wget
     curl
     home-manager
-    river
+    river-classic
     #xdg-desktop-portal-wlr
     fish
     acpilight
@@ -70,7 +79,7 @@
     pulseaudio
   ];
 
-  programs.river.enable = true;
+  programs.river-classic.enable = true;
   programs.fish.enable = true;
 
   services = {
@@ -105,7 +114,7 @@
       xdg-desktop-portal-wlr
       #xdg-desktop-portal-gtk
     ];
-    configPackages = [ pkgs.river ];
+    configPackages = [ pkgs.river-classic ];
     #config.common.default = [ "wlr" ];
     #config.river = {
     #  default = [ "wlr" ];
@@ -129,8 +138,6 @@
 
     amdgpu = {
       initrd.enable = true;
-      amdvlk.enable = true;
-      amdvlk.support32Bit.enable = true;
     };
     #display = {
     #  outputs = {
