@@ -7,11 +7,12 @@
 
   outputs = { nixpkgs, ... }@inputs:
   let
-    hostname = "pink-pear";
+    desktop = "pink-pear";
+    laptop  = "rainbow-lemon";
   in {
-    nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.${laptop} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = { inherit hostname; };
+      specialArgs = { hostname = laptop; };
       modules = [
         ./configuration.nix
       ];
