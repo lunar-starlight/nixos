@@ -9,20 +9,18 @@
   let
     desktop = "pink-pear";
     laptop  = "rainbow-lemon";
-  in {
-    nixosConfigurations.${laptop} = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { hostname = laptop; };
-      modules = [
-        ./configuration.nix
-      ];
+    machine = { hostname, extraSpecialArgs ? {}, extraModules ? []}: {
+      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { hostname = hostname; } // extraSpecialArgs;
+        modules = [
+          ./configuration.nix
+        ] ++ extraModules;
+      };
     };
-    nixosConfigurations.${desktop} = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { hostname = desktop; };
-      modules = [
-        ./configuration.nix
-      ];
-    };
-  };
+  in
+    nixpkgs.lib.attrsets.foldAttrs (x: acc: x // acc) {} [
+      (machine { hostname = desktop; })
+      (machine { hostname = laptop; })
+    ];
 }
