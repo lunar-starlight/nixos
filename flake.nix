@@ -9,13 +9,13 @@
   let
     desktop = "pink-pear";
     laptop  = "rainbow-lemon";
-    machine = { hostname, extraSpecialArgs ? {}, extraModules ? []}: {
+    machine = { hostname, specialArgs ? {}, modules ? []}: {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { hostname = hostname; } // extraSpecialArgs;
+        specialArgs = { hostname = hostname; } // specialArgs;
         modules = [
           ./configuration.nix
-        ] ++ extraModules;
+        ] ++ modules;
       };
     };
   in

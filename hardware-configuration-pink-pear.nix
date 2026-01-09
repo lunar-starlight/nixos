@@ -41,4 +41,16 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  
+  systemd.services.set-fb = {
+    enable = true;
+    wantedBy = [ "getty.target" ];
+    description = "Set framebuffer geometry";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      Restart = "on-failure";
+      ExecStart = ''${pkgs.bash}/bin/bash -c "until test -e '/dev/fb0'; do :; done ; ${pkgs.fbset}/bin/fbset -xres 2560 -yres 1440 -depth 24 -match"'';
+    };
+  };
 }
