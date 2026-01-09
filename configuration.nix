@@ -80,6 +80,7 @@
   ];
 
   programs.river-classic.enable = true;
+  programs.river-classic.extraPackages = [];
   programs.fish.enable = true;
 
   services = {
