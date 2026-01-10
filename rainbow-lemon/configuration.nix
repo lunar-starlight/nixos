@@ -18,7 +18,29 @@
     amdgpu = {
       initrd.enable = true;
     };
+
+    printers = {
+      ensurePrinters = [
+        {
+          name = "printsrv";
+          deviceUri = "smb://printsrv.fmf.uni-lj.si/TISKAJ";
+          model = "CNRCUPSIRADVC5840ZK.ppd"; # CANON IR-ADV C5840/5850
+          ppdOptions = {
+            Duplex = "DuplexNoTumble";
+            PageSize = "A4";
+          };
+        }
+      ];
+      ensureDefaultPrinter = "printsrv";
+    };
   };
+
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [ canon-cups-ufr2 ];
+  };
+  services.samba.enable = true;
+
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
