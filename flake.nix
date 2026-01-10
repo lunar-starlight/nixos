@@ -7,20 +7,22 @@
 
   outputs = { nixpkgs, ... }@inputs:
   let
-    desktop = "pink-pear";
-    laptop  = "rainbow-lemon";
+    lib = nixpkgs.lib;
     machine = { hostname, specialArgs ? {}, modules ? []}: {
-      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.${hostname} = lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { hostname = hostname; } // specialArgs;
+        specialArgs = { inherit hostname; } // specialArgs;
         modules = [
           ./configuration.nix
         ] ++ modules;
       };
     };
-  in
-    nixpkgs.lib.attrsets.foldAttrs (x: acc: x // acc) {} [
-      (machine { hostname = desktop; })
-      (machine { hostname = laptop; })
+    hosts = [
+      { hostname = "pink-pear"; }
+      { hostname = "rainbow-lemon"; }
     ];
+  in
+    lib.foldAttrs lib.mergeAttrs {} (
+      lib.map machine hosts
+    );
 }
