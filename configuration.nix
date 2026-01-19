@@ -59,9 +59,9 @@
     wget
     curl
     home-manager
-    river-classic
+    #river-classic
     #xdg-desktop-portal-wlr
-    fish
+    #fish
     acpilight
     fbset
 
@@ -75,6 +75,22 @@
   programs.river-classic.extraPackages = [];
   programs.fish.enable = true;
 
+  programs.uwsm = {
+    enable = true;
+    waylandCompositors = {
+      river = {
+        prettyName = "River Classic";
+        comment = "River Classic compositor managed by UWSM";
+        binPath = "${pkgs.river-classic}/bin/river";
+      };
+    };
+  };
+  environment.loginShellInit = ''
+    if uwsm check may-start; then
+      exec uwsm start hyprland.desktop
+    fi
+  '';
+
   services = {
     pipewire = {
       enable = true;
@@ -84,8 +100,8 @@
       };
     };
  
-    displayManager.ly = {
-      enable = true;
+    #displayManager.ly = {
+    #  enable = true;
       #settings = {
       #  animation = "matrix";
       #  bigclock = "en";
@@ -94,7 +110,7 @@
       #  shutdown_cmd = "systemctl poweroff";
       #  sleep_cmd = "systemctl sleep";
       #};
-    };
+    #};
 
     udev.extraRules = ''
       KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
@@ -105,13 +121,11 @@
     enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr
-      #xdg-desktop-portal-gtk
+      xdg-desktop-portal-gtk
+      #xdg-desktop-portal-luminous
     ];
     configPackages = [ pkgs.river-classic ];
-    #config.common.default = [ "wlr" ];
-    #config.river = {
-    #  default = [ "wlr" ];
-    #};
+    #config.common.default = [ "luminous" "wlr" "gtk" ];
     #wlr.enable = true;
   };
 
