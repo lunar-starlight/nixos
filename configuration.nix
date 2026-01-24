@@ -87,7 +87,7 @@
   };
   environment.loginShellInit = ''
     if uwsm check may-start; then
-      exec uwsm start hyprland.desktop
+      exec uwsm start river-uwsm.desktop
     fi
   '';
 

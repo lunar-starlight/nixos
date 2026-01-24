@@ -1,7 +1,7 @@
 { config, pkgs, hostname, ... }:
 {
   imports = [
-    ./${hostname}/hardware-configuration.nix
+    ./hardware-configuration.nix
   ];
 
   environment.systemPackages = with pkgs; [
