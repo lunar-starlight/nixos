@@ -85,11 +85,11 @@
       };
     };
   };
-  environment.loginShellInit = ''
-    if uwsm check may-start; then
-      exec uwsm start river-uwsm.desktop
-    fi
-  '';
+  #environment.loginShellInit = ''
+  #  if uwsm check may-start; then
+  #    exec uwsm start river-uwsm.desktop
+  #  fi
+  #'';
 
   services = {
     pipewire = {
@@ -99,7 +99,19 @@
         enable = true;
       };
     };
- 
+
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          user = "greeter";
+          command = 
+            #"${pkgs.tuigreet}/bin/tuigreet --power-shutdown 'systemctl poweroff' --power-reboot 'systemctl reboot' --theme 'border=magenta;text=cyan;prompt=green;time=red;action=blue;button=yellow;container=black;input=red' -tr";
+            "${pkgs.greetd}/bin/agreety -c 'uwsm start river-uwsm.desktop'";
+        };
+      };
+    };
+
     #displayManager.ly = {
     #  enable = true;
       #settings = {

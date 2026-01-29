@@ -20,6 +20,10 @@
     };
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "muf" ];
+
   systemd.services.set-fb = {
     enable = true;
     wantedBy = [ "getty.target" ];
