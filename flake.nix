@@ -2,7 +2,7 @@
   description = "NixOS config flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
   };
 
   outputs = { nixpkgs, ... }@inputs:
