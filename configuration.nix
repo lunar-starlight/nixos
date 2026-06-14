@@ -53,6 +53,7 @@
     #"no-url-literals"
     #"pipe-operators"
   ];
+  environment.defaultPackages = [];
   environment.systemPackages = with pkgs; [
     git
     vim
