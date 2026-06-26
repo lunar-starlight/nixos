@@ -7,6 +7,9 @@
   environment.systemPackages = with pkgs; [
   ];
 
+  # HM doesn't have steam module, and this does some driver setup
+  programs.steam.enable = true;
+
   hardware = {
     acpilight.enable = true;
 
@@ -23,18 +26,6 @@
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "muf" ];
-
-  systemd.services.set-fb = {
-    enable = true;
-    wantedBy = [ "getty.target" ];
-    description = "Set framebuffer geometry";
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      Restart = "on-failure";
-      ExecStart = ''${pkgs.bash}/bin/bash -c "until test -e '/dev/fb0'; do :; done ; ${pkgs.fbset}/bin/fbset -xres 2560 -yres 1440 -depth 24 -match"'';
-    };
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
