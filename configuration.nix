@@ -128,6 +128,11 @@
     udev.extraRules = ''
       KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
     '';
+
+    ratbagd = {
+      enable = true;
+      package = (pkgs.callPackage ./packages/libratbag/package.nix {});
+    };
   };
 
   xdg.portal = {
