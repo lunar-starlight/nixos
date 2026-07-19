@@ -19,7 +19,16 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     initrd.kernelModules = [ "amdgpu" ];
+    kernelPackages = pkgs.linuxPackages_zen;
+    zswap.enable = true;
   };
+
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 64*1024;
+    options = [ "discard" ];
+  }];
+  #services.swapspace.enable = true;
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
