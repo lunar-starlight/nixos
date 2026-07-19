@@ -5,6 +5,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    evsieve
   ];
 
   # HM doesn't have steam module, and this does some driver setup
@@ -20,6 +21,17 @@
 
     amdgpu = {
       initrd.enable = true;
+    };
+  };
+
+  systemd.services = {
+    "evsieve-G520X" = {
+      description = "Clone mouse events";
+      wantedBy = [ "graphical.target" ];
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = "${pkgs.evsieve}/bin/evsieve --input /dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse --output create-link=/dev/input/by-id/G502X";
+      };
     };
   };
 
